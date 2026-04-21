@@ -87,23 +87,23 @@ impl Reporter {
     }
 }
 
-fn add_row(table: &mut Table, field: &str, value: String) {
+pub fn add_row(table: &mut Table, field: &str, value: String) {
     table.add_row(vec![field.to_string(), value]);
 }
 
-fn add_opt_string(table: &mut Table, field: &str, value: Option<&str>) {
+pub fn add_opt_string(table: &mut Table, field: &str, value: Option<&str>) {
     if let Some(value) = value {
         add_row(table, field, value.to_string());
     }
 }
 
-fn add_opt_f64(table: &mut Table, field: &str, value: Option<f64>) {
+pub fn add_opt_f64(table: &mut Table, field: &str, value: Option<f64>) {
     if let Some(value) = value {
         add_row(table, field, format!("{value:.2}"));
     }
 }
 
-fn fmt_pairs(pairs: &[(String, usize)]) -> String {
+pub fn fmt_pairs(pairs: &[(String, usize)]) -> String {
     pairs
         .iter()
         .map(|(v, c)| format!("{v}:{c}"))
@@ -111,7 +111,7 @@ fn fmt_pairs(pairs: &[(String, usize)]) -> String {
         .join(", ")
 }
 
-fn null_percent(null_count: usize, row_count: usize) -> f64 {
+pub fn null_percent(null_count: usize, row_count: usize) -> f64 {
     if row_count == 0 {
         0.0
     } else {
