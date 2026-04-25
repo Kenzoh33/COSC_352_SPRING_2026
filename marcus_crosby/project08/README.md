@@ -136,7 +136,7 @@ across 290 neighborhoods.
 The Pearson correlation between active vacant notices and crime events was
 0.311, which suggests a moderate positive association. The top vacancy quartile
 of neighborhoods averaged 1,167.384 crime events, while the bottom vacancy
-quartile averaged 140.959 crime events. That is an 8.282x difference in average
+quartile averaged 140.959 crime events. That is an 8.3x difference in average
 crime-event counts between the highest- and lowest-vacancy neighborhood groups.
 
 Several high-vacancy neighborhoods also had high crime totals. Carrollton Ridge
