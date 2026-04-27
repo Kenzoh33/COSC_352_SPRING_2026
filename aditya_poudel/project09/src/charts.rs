@@ -82,7 +82,7 @@ pub fn scatter_vacants_vs_arrests(
     Ok(())
 }
 
-/// Chart 2 — Horizontal bar: top N neighborhoods by vacancy count
+/// Chart 2 — Vertical bar: top N neighborhoods by vacancy count
 pub fn bar_top_vacancies(
     stats: &[NeighborhoodStats],
     path: &str,
@@ -100,18 +100,22 @@ pub fn bar_top_vacancies(
             ("sans-serif", 22).into_font(),
         )
         .margin(50)
-        .x_label_area_size(50)
-        .y_label_area_size(230)
-        .build_cartesian_2d(0u32..max_val, (0..data.len()).into_segmented())?;
+        .x_label_area_size(120)
+        .y_label_area_size(70)
+        .build_cartesian_2d(
+            (0..data.len()).into_segmented(),
+            0u32..max_val,
+        )?;
 
     chart.configure_mesh()
-        .x_desc("Vacant Building Notices")
+        .y_desc("Vacant Building Notices")
         .axis_desc_style(("sans-serif", 13))
-        .y_labels(data.len())
-        .y_label_formatter(&|idx| {
+        .x_labels(data.len())
+        .x_label_style(("sans-serif", 10))
+        .x_label_formatter(&|idx| {
             if let SegmentValue::CenterOf(i) = idx {
                 data.get(*i)
-                    .map(|s| truncate(&s.neighborhood, 30))
+                    .map(|s| truncate(&s.neighborhood, 18))
                     .unwrap_or_default()
             } else { String::new() }
         })
@@ -119,10 +123,10 @@ pub fn bar_top_vacancies(
 
     chart.draw_series(data.iter().enumerate().map(|(i, s)| {
         let mut bar = Rectangle::new(
-            [(0, SegmentValue::Exact(i)), (s.vacant_count as u32, SegmentValue::Exact(i + 1))],
+            [(SegmentValue::Exact(i), 0), (SegmentValue::Exact(i + 1), s.vacant_count as u32)],
             RGBColor(255, 140, 0).mix(0.85).filled(),
         );
-        bar.set_margin(3, 3, 0, 0);
+        bar.set_margin(0, 0, 3, 3);
         bar
     }))?;
 
@@ -130,7 +134,7 @@ pub fn bar_top_vacancies(
     Ok(())
 }
 
-/// Chart 3 — Horizontal bar: top N neighborhoods by arrest count
+/// Chart 3 — Vertical bar: top N neighborhoods by arrest count
 pub fn bar_top_arrests(
     stats: &[NeighborhoodStats],
     path: &str,
@@ -150,18 +154,22 @@ pub fn bar_top_arrests(
             ("sans-serif", 22).into_font(),
         )
         .margin(50)
-        .x_label_area_size(50)
-        .y_label_area_size(230)
-        .build_cartesian_2d(0u32..max_val, (0..data.len()).into_segmented())?;
+        .x_label_area_size(120)
+        .y_label_area_size(70)
+        .build_cartesian_2d(
+            (0..data.len()).into_segmented(),
+            0u32..max_val,
+        )?;
 
     chart.configure_mesh()
-        .x_desc("Arrest Count")
+        .y_desc("Arrest Count")
         .axis_desc_style(("sans-serif", 13))
-        .y_labels(data.len())
-        .y_label_formatter(&|idx| {
+        .x_labels(data.len())
+        .x_label_style(("sans-serif", 10))
+        .x_label_formatter(&|idx| {
             if let SegmentValue::CenterOf(i) = idx {
                 data.get(*i)
-                    .map(|s| truncate(&s.neighborhood, 30))
+                    .map(|s| truncate(&s.neighborhood, 18))
                     .unwrap_or_default()
             } else { String::new() }
         })
@@ -169,10 +177,10 @@ pub fn bar_top_arrests(
 
     chart.draw_series(data.iter().enumerate().map(|(i, s)| {
         let mut bar = Rectangle::new(
-            [(0, SegmentValue::Exact(i)), (s.arrest_count as u32, SegmentValue::Exact(i + 1))],
+            [(SegmentValue::Exact(i), 0), (SegmentValue::Exact(i + 1), s.arrest_count as u32)],
             RGBColor(220, 50, 47).mix(0.85).filled(),
         );
-        bar.set_margin(3, 3, 0, 0);
+        bar.set_margin(0, 0, 3, 3);
         bar
     }))?;
 
