@@ -10,16 +10,16 @@ use std::path::Path;
 
 pub struct Profiler;
 
-trait Compute {
+pub trait Compute {
     fn compute(values: &[String], args: &Args) -> ColumnProfile;
 }
 
-struct IntegerComputer;
-struct FloatComputer;
-struct BooleanComputer;
-struct DateComputer;
-struct CategoricalComputer;
-struct TextComputer;
+pub struct IntegerComputer;
+pub struct FloatComputer;
+pub struct BooleanComputer;
+pub struct DateComputer;
+pub struct CategoricalComputer;
+pub struct TextComputer;
 
 impl Profiler {
     pub fn profile(file: &str, args: &Args) -> Result<Vec<ColumnProfile>> {
@@ -36,7 +36,7 @@ impl Profiler {
         Self::profile_from_reader(reader, args)
     }
 
-    fn profile_from_reader<R: io::Read>(mut reader: Reader<R>, args: &Args) -> Result<Vec<ColumnProfile>> {
+    pub fn profile_from_reader<R: io::Read>(mut reader: Reader<R>, args: &Args) -> Result<Vec<ColumnProfile>> {
         let headers = reader
             .headers()?
             .iter()
@@ -81,7 +81,7 @@ impl Profiler {
         Ok(profiles)
     }
 
-    fn push_record(columns: &mut [Vec<String>], record: &StringRecord) {
+    pub fn push_record(columns: &mut [Vec<String>], record: &StringRecord) {
         columns.iter_mut().enumerate().for_each(|(idx, col)| {
             col.push(record.get(idx).unwrap_or_default().to_string());
         });
@@ -151,7 +151,7 @@ impl Compute for TextComputer {
     }
 }
 
-fn non_null_unique_count(values: &[String]) -> usize {
+pub fn non_null_unique_count(values: &[String]) -> usize {
     values
         .iter()
         .map(|v| v.trim())
@@ -160,7 +160,7 @@ fn non_null_unique_count(values: &[String]) -> usize {
         .len()
 }
 
-fn has_mixed_types(values: &[String]) -> bool {
+pub fn has_mixed_types(values: &[String]) -> bool {
     #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
     enum Kind {
         Integer,
@@ -192,7 +192,7 @@ fn has_mixed_types(values: &[String]) -> bool {
     kinds.len() > 1
 }
 
-fn numeric_profile(values: &[String], args: &Args, as_integer: bool) -> ColumnProfile {
+pub fn numeric_profile(values: &[String], args: &Args, as_integer: bool) -> ColumnProfile {
     let row_count = values.len();
     let null_count = values.iter().filter(|v| is_null_like(v)).count();
 
@@ -249,7 +249,7 @@ fn numeric_profile(values: &[String], args: &Args, as_integer: bool) -> ColumnPr
     profile
 }
 
-fn frequency_profile(values: &[String], args: &Args, inferred: InferredType) -> ColumnProfile {
+pub fn frequency_profile(values: &[String], args: &Args, inferred: InferredType) -> ColumnProfile {
     let row_count = values.len();
     let null_count = values.iter().filter(|v| is_null_like(v)).count();
 
@@ -271,7 +271,7 @@ fn frequency_profile(values: &[String], args: &Args, inferred: InferredType) -> 
     profile
 }
 
-fn format_number(value: f64, as_integer: bool) -> String {
+pub fn format_number(value: f64, as_integer: bool) -> String {
     if as_integer {
         format!("{}", value as i64)
     } else {
